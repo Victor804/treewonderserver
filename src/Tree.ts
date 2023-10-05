@@ -1,8 +1,8 @@
-import { IsDateString, IsIn, IsInt, IsNotEmpty, IsNumber, IsString, Max, Min } from 'class-validator';
+import { IsDateString, IsIn, IsInt, IsNotEmpty, IsNumber, IsString, IsUrl, Max, Min } from 'class-validator';
 // help :  https://dev.to/sarathsantoshdamaraju/nestjs-and-class-validator-cheat-sheet-13ao
 
 /**
- * NOT FINISHED YET
+ * CLASS REPRESENTING A TREE WITH ALL HIS INFORMATIONS
  */
 export class Tree {
     /**
@@ -14,79 +14,145 @@ export class Tree {
     id: number;
 
     /**
-     * TREE
+     * TREE INFORMATIONS
      */
+    @IsString()
+    @IsNotEmpty()
     frenchName: string; // arbres_libellefrancais | "C\u00e8dre"       "Marronnier"
+
+    @IsString()
     commonName: string; // com_nom_usuel | "C\u00e8dre du Liban"    "Marronnier d'Inde"
+
+    @IsString()
     botanicName: string; // com_nom_latin | "Cedrus libani"       "Aesculus hippocastanum"
+
+    @IsInt()
+    @Min(0)
+    @Max(150)
     height: number; // arbres_hauteurenm | 25.0     22.0
+
+    @IsInt()
+    @Min(0)
+    @Max(5000)
     circumference: number; // arbres_circonferenceencm | 468.0      350.0
+
     @IsString()
     @IsIn(['M','A','J'])
     developmentStage: string; // arbres_stadedeveloppement
-    pepiniere: string; // arbres_pepiniere | "Inconnue" -> qq connus
-    type: string; // arbres_genre | "Cedrus"   "Aesculus"
-    species: string; // arbres_espece | "atlantica"      "hippocastanum"
-    variety: string; // arbres_varieteoucultivar | qq non nuls
-    @IsNumber()
+
+    @IsInt()
+    @Min(1800)
+    @Max(2025)
     plantationYear: number; // com_annee_plantation | "1862"     "Inconnue"
-    @IsDateString()
-    plantationDate: string; // arbres_dateplantation | "1862-01-01T00:09:21+00:00"      "1700-01-01T00:09:21+00:00"
-    taxonomicAuthority: string; // com_autorite_taxo | "A.Rich."    "L."
+
+    @IsString()
+    @IsIn(["Paysager", "Historique", "Botanique", "Symbolique"])
     outstandingQualification: string; // com_qualification_rem | "Paysager"   "Historique"  "Botanique"  "Symbolique"
+
+    @IsString()
     summary: string; // com_resume | "Cet arbre est class\u00e9 remarquable pour son ampleur et son empreinte dans le paysage."
+
+    @IsString()
     description: string; // com_descriptif
+
+    @IsString()
+    type: string; // arbres_genre | "Cedrus"   "Aesculus"
+
+    @IsString()
+    species: string; // arbres_espece | "atlantica"      "hippocastanum"
+
+    @IsString()
+    variety: string; // arbres_varieteoucultivar | 15 non nuls
+
+    @IsString()
+    taxonomicAuthority: string; // com_autorite_taxo | "A.Rich."    "L."
+
+    @IsUrl()
     sign: string; // com_url_pdf | "https://capgeo.sig.paris.fr/PdfEtImages/ArbresRemarquables/PDF/2002348.pdf"
+
+    @IsUrl()
     picture: string; // com_url_photo1 | "https://capgeo.sig.paris.fr/PdfEtImages/ArbresRemarquables/Photos2023/1/2002348.jpg"
 
 
     /**
-     * LOCALISATION
+     * Geographic coordinates
      */
-    
-    // Geographic coordinates
     @IsNumber()
     @Min(-180)
     @Max(180)
+    @IsNotEmpty()
     longitude: number;  // "geom_x_y": {"lon": 2.2404811309796573, "lat": 48.86339073126113}
+
     @IsNumber()
     @Min(0)
     @Max(90)
+    @IsNotEmpty()
     latitude: number;   // "geom_x_y": {"lon": 2.2404811309796573, "lat": 48.86339073126113}
 
-    // Address
-    city: string;   // Paris
+    /**
+     * Address
+     */
+    @IsString()
+    city: string;   // Paris (+ arrondissement ?)
+    // arrondissement: number; // com_arrondissement | "16"       "20"
 
+    @IsString()
     site: string; // com_site: string | "Bois de Boulogne. Grande Cascade"     "Cimeti\u00e8re du P\u00e8re Lachaise"
 
-    arrondissement: number; // com_arrondissement | "16"       "20"
-    arrondissementBis: string; // arbres_arrondissement | "BOIS DE BOULOGNE"  "PARIS 20E ARRDT"
+    @IsString()
+    @IsNotEmpty()
+    address: string; // com_adresse || arbres_adresse (if com_adresse null)
+    // "Carrefour de Longchamp" "GRANDE CASCADE - CARREFOUR DE LONGCHAMP"
 
-    address: string; // arbres_adresse | "GRANDE CASCADE - CARREFOUR DE LONGCHAMP"   "CIMETIERE DU PERE LACHAISE / DIV 76"
-    addressBis: string; // com_adresse | "Carrefour de Longchamp"     "Cimetiere Du Pere Lachaise / Div 76"
-    
-    addressComplement: string; // arbre_complement_adresse | "16-09"
-    addressComplementBis: string; // com_complement_adresse | "16-09"  ->   3 différents
-
-    domanialite: string; // arbres_domanialite | "Jardin"  "CIMETIERE"
-    domanialiteBis: string; // com_domanialite | "Bois de Boulogne"       "Cimeti\u00e8re"
+    @IsString()
+    domanialite: string; // com_domanialite
 
 
     /**
      * OTHERS 
      */
+    @IsString()
+    numDelib: string;  // com_delib_num  (Numéro de délibération)  -> 16 non null
 
-    numDelib: string;  // com_delib_num  (Numéro de délibération)  -> bcp de non null
-    dateDelib: string; // com_delib_date (Date de la délibération) -> bcp de non null
-    treeLabel: string; // com_label_arbres   (Label national)      -> bcp de non null
+    @IsString()
+    dateDelib: string; // com_delib_date (Date de la délibération) -> 16 non null
+
+    @IsString()
     copyright: string; // com_copyright1 | "Sonia Yassa / Ville de Paris"      "Mathieu Bedel / Ville de Paris"
 
 
-  constructor(id: number, commonName: string, botanicName: string) {
-    this.id = id;
-    this.commonName = commonName;
-    this.botanicName = botanicName;
-  }
+    constructor(id: number, frenchName: string, commonName: string, botanicName: string, height: number, circumference: number, 
+      developmentStage: string, plantationYear: number, outstandingQualification: string, summary: string, description: string,
+      type: string, species: string, variety: string, taxonomicAuthority: string, sign: string, picture: string,
+      longitude: number, latitude: number, city: string, site: string, address: string, domanialite: string,
+      numDelib: string, dateDelib: string, copyright: string) {
+        this.id = id;
+        this.frenchName = frenchName;
+        this.commonName = commonName;
+        this.botanicName = botanicName;
+        this.height = height;
+        this.circumference = circumference;
+        this.developmentStage = developmentStage;
+        this.plantationYear = plantationYear;
+        this.outstandingQualification = outstandingQualification;
+        this.summary = summary;
+        this.description = description;
+        this.type = type;
+        this.species = species;
+        this.variety = variety;
+        this.taxonomicAuthority = taxonomicAuthority;
+        this.sign = sign;
+        this.picture = picture;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.city = city;
+        this.site = site;
+        this.address = address;
+        this.domanialite = domanialite;
+        this.numDelib = numDelib;
+        this.dateDelib = dateDelib;
+        this.copyright = copyright;
+    }
 }
 
 export const compareWithTitle = (a: Tree, b: Tree): number => {
