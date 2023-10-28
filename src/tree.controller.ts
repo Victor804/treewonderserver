@@ -1,12 +1,6 @@
 import {
-  Body,
   Controller,
-  Delete,
   Get,
-  HttpCode,
-  Param,
-  Post,
-  Query,
 } from '@nestjs/common';
 import { TreeService } from './tree.service';
 import { Tree } from './Tree';

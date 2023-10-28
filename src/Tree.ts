@@ -120,20 +120,51 @@ export class Tree {
     @IsString()
     copyright: string; // com_copyright1 | "Sonia Yassa / Ville de Paris"      "Mathieu Bedel / Ville de Paris"
 
-
-    constructor(id: number, name: string, commonName: string, botanicName: string, height: number, circumference: number, 
-      developmentStage: string, plantationYear: number, outstandingQualification: string, summary: string, description: string,
+    /**
+     * Full constructor
+     * @param id id of the tree
+     * @param name general name of the tree (example: Oak)
+     * @param commonName precise name (example: white oak)
+     * @param botanicName botanic (latin) name
+     * @param height height of the tree in meters
+     * @param circumference circumference of the trunk in centimeters
+     * @param developmentStage development stage of the tree ("M", "A" or "J")
+     * @param plantationYear year of plantation of the tree
+     * @param outstandingQualification reason why this tree is here ("Paysager", "Historique", "Botanique", "Symbolique")
+     * @param summary summary of the description
+     * @param description description of the tree
+     * @param type type of tree
+     * @param species species of the tree
+     * @param variety variatety of the tree
+     * @param taxonomicAuthority name(s) of the scientist(s) who first validly published the name of the tree 
+     * @param sign url to the picture of the sign of this tree
+     * @param picture url to the picture of this tree
+     * @param longitude longitude coordinate of this tree
+     * @param latitude latitude coordinate of this tree
+     * @param city city where this tree is
+     * @param site name of the site where the tree is
+     * @param address address of the tree
+     * @param domanialite domanialite (public space) where the tree is
+     * @param numDelib deliberation number [optionnal]
+     * @param dateDelib deliberation date [optionnal]
+     * @param copyright copyright [optionnal]
+     */
+    constructor(id: number, name: string, commonName: string, botanicName: string, height: number | string, circumference: number | string, 
+      developmentStage: string, plantationYear: number | string, outstandingQualification: string, summary: string, description: string,
       type: string, species: string, variety: string, taxonomicAuthority: string, sign: string, picture: string,
       longitude: number, latitude: number, city: string, site: string, address: string, domanialite: string,
-      numDelib: string, dateDelib: string, copyright: string) {
+      numDelib = "", dateDelib = "", copyright = "") {
         this.id = id;
         this.name = name;
         this.commonName = commonName;
         this.botanicName = botanicName;
-        this.height = height;
-        this.circumference = circumference;
+        if(typeof height === "number") this.height = height;
+          else if(!Number.isNaN(Number(height))) this.height = Number(height);
+        if(typeof circumference === "number") this.circumference = circumference;
+          else if(!Number.isNaN(Number(circumference))) this.circumference = Number(circumference);
         this.developmentStage = developmentStage;
-        this.plantationYear = plantationYear;
+        if(typeof plantationYear === "number") this.plantationYear = plantationYear;
+          else if(!Number.isNaN(Number(plantationYear))) this.plantationYear = Number(plantationYear)
         this.outstandingQualification = outstandingQualification;
         this.summary = summary;
         this.description = description;
