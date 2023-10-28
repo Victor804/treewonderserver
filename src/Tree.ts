@@ -8,9 +8,9 @@ export class Tree {
     /**
      * ID of the tree
      */
-    @IsNotEmpty({message:'ID cannot be empty'})
+    @IsNotEmpty()
     @IsInt()
-    @Min(0)
+    @Min(0, {message:'ID must be positive'})
     id: number;
 
     /**
@@ -18,7 +18,7 @@ export class Tree {
      */
     @IsString()
     @IsNotEmpty()
-    frenchName: string; // arbres_libellefrancais | "C\u00e8dre"       "Marronnier"
+    name: string; // arbres_libellefrancais | "C\u00e8dre"       "Marronnier"
 
     @IsString()
     commonName: string; // com_nom_usuel | "C\u00e8dre du Liban"    "Marronnier d'Inde"
@@ -27,17 +27,17 @@ export class Tree {
     botanicName: string; // com_nom_latin | "Cedrus libani"       "Aesculus hippocastanum"
 
     @IsInt()
-    @Min(0)
-    @Max(150)
+    @Min(0, {message:'Height must be positive'})
+    @Max(150, {message:'Maximum height is 150 meters'})
     height: number; // arbres_hauteurenm | 25.0     22.0
 
     @IsInt()
-    @Min(0)
-    @Max(5000)
+    @Min(0, {message:'Circumference must be positive'})
+    @Max(5000, {message:'Maximum circumference is 5000 cm'})
     circumference: number; // arbres_circonferenceencm | 468.0      350.0
 
     @IsString()
-    @IsIn(['M','A','J'])
+    @IsIn(['M','A','J'], {message:'DevelopmentStage must be "M", "A" or "J"'})
     developmentStage: string; // arbres_stadedeveloppement
 
     @IsInt()
@@ -78,14 +78,14 @@ export class Tree {
      * Geographic coordinates
      */
     @IsNumber()
-    @Min(-180)
-    @Max(180)
+    @Min(-180, {message:'Longitude must be between -180 and 180'})
+    @Max(180, {message:'Longitude must be between -180 and 180'})
     @IsNotEmpty()
     longitude: number;  // "geom_x_y": {"lon": 2.2404811309796573, "lat": 48.86339073126113}
 
     @IsNumber()
-    @Min(0)
-    @Max(90)
+    @Min(0, {message:'Latitude must be between 0 and 90'})
+    @Max(90, {message:'Latitude must be between 0 and 90'})
     @IsNotEmpty()
     latitude: number;   // "geom_x_y": {"lon": 2.2404811309796573, "lat": 48.86339073126113}
 
@@ -121,13 +121,13 @@ export class Tree {
     copyright: string; // com_copyright1 | "Sonia Yassa / Ville de Paris"      "Mathieu Bedel / Ville de Paris"
 
 
-    constructor(id: number, frenchName: string, commonName: string, botanicName: string, height: number, circumference: number, 
+    constructor(id: number, name: string, commonName: string, botanicName: string, height: number, circumference: number, 
       developmentStage: string, plantationYear: number, outstandingQualification: string, summary: string, description: string,
       type: string, species: string, variety: string, taxonomicAuthority: string, sign: string, picture: string,
       longitude: number, latitude: number, city: string, site: string, address: string, domanialite: string,
       numDelib: string, dateDelib: string, copyright: string) {
         this.id = id;
-        this.frenchName = frenchName;
+        this.name = name;
         this.commonName = commonName;
         this.botanicName = botanicName;
         this.height = height;
@@ -156,6 +156,6 @@ export class Tree {
 }
 
 export const compareWithTitle = (a: Tree, b: Tree): number => {
-  return a.commonName.localeCompare(b.commonName);
+  return a.name.localeCompare(b.name);
 };
 
