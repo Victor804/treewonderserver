@@ -21,14 +21,35 @@ export class TreeService {
     };
   }
 
-  addTree(tree: Tree): void {
+  /**
+   * Add a tree in the storage
+   * @param tree new tree to add
+   */
+  addTree(tree: Tree) {
     this.storage.set(tree.id, tree);
   }
 
+  /**
+   * Delete a tree from the storage
+   * @param id id of the tree to delete
+   */
+  delete(id: number) {
+    this.storage.delete(id);
+  }
+
+  /**
+   * Get all the trees from the storage
+   * @returns array of trees
+   */
   getAllTrees(): Array<Tree> {
     return Array.from(this.storage.values());
   }
 
+  /**
+   * Get one tree by his id
+   * @param id id of the tree
+   * @returns the tree found
+   */
   getTree(id: number): Tree {
     return this.storage.get(id);
   }
