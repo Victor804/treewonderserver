@@ -186,7 +186,7 @@ export class Tree {
     }
 }
 
-export const compareWithTitle = (a: Tree, b: Tree): number => {
+export const compareWithName = (a: Tree, b: Tree): number => {
   return a.name.localeCompare(b.name);
 };
 

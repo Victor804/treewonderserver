@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Tree } from './Tree';
+import { Tree, compareWithName } from './Tree';
 import { promises } from 'fs';
 
 @Injectable()
@@ -25,12 +25,29 @@ export class TreeService {
     this.storage.set(tree.id, tree);
   }
 
+  getAllTrees(): Array<Tree> {
+    return Array.from(this.storage.values());
+  }
+
   getTree(id: number): Tree {
     return this.storage.get(id);
   }
 
-  getAllTrees(): Array<Tree> {
-    return Array.from(this.storage.values());
+  /**
+   * Search all the trees including a term in their parameters
+   * @param term text to search in all the trees
+   * @returns array of trees found, sorted by names
+   */
+  getTrees(term: string): Array<Tree> {
+    return this.getAllTrees()
+    .filter((tree) => tree.name.includes(term) || tree.commonName.includes(term) || tree.botanicName.includes(term)
+      || tree.outstandingQualification.includes(term) || tree.summary.includes(term) || tree.description.includes(term)
+      || tree.type.includes(term) || tree.species.includes(term) || tree.variety.includes(term)
+      || tree.taxonomicAuthority.includes(term) || tree.developmentStage.includes(term)
+      || tree.city.includes(term) || tree.site.includes(term) || tree.address.includes(term) || tree.domanialite.includes(term)
+      || tree.numDelib.includes(term) || tree.dateDelib.includes(term) || tree.copyright.includes(term)
+    )
+    .sort(compareWithName);
   }
 
   loadBooksFromApi() {}
