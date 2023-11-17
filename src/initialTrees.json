@@ -14,15 +14,11 @@
     "type" : "",
     "species" : "",
     "variety" : "",
-    "taxonomicAuthority" : "",
     "sign" : "",
     "picture" : "",
     "longitude" : 45.1,
     "latitude" : 45.1,
-    "city" : "",
-    "site" : "",
-    "address" : "test",
-    "domanialite" : ""
+    "address" : "test"
 },
 {
     "id" : 2,
@@ -39,15 +35,11 @@
     "type" : "",
     "species" : "",
     "variety" : "",
-    "taxonomicAuthority" : "",
     "sign" : "",
     "picture" : "",
     "longitude" : "-12.45",
     "latitude" : "0.7",
-    "city" : "",
-    "site" : "",
-    "address" : "addresse 1",
-    "domanialite" : ""
+    "address" : "addresse 1"
 },
 {
     "id" : 3,
@@ -64,14 +56,10 @@
     "type" : "",
     "species" : "",
     "variety" : "",
-    "taxonomicAuthority" : "",
     "sign" : "",
     "picture" : "",
     "longitude" : "123",
     "latitude" : "-0",
-    "city" : "",
-    "site" : "",
-    "address" : "879 route de Mimet, Gardanne, France",
-    "domanialite" : ""
+    "address" : "879 route de Mimet, Gardanne, France"
 }
 ]

@@ -1,8 +1,7 @@
 
 /**
- * List all the fields of the original API (with the original names) with 2 examples each time
+ * Class representing a tree with all the fields and their original names of the original API
  */
-
 export interface TreeFromAPI {
     geom_x_y: Map<string, number>,
     arbres_idbase: number, // 2002348.0 | 147672.0

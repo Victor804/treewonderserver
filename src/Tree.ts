@@ -1,4 +1,4 @@
-import { IsDateString, IsIn, IsInt, IsNotEmpty, IsNumber, IsString, IsUrl, Max, Min } from 'class-validator';
+import { IsIn, IsInt, IsNotEmpty, IsNumber, IsString, IsUrl, Max, Min } from 'class-validator';
 // help :  https://dev.to/sarathsantoshdamaraju/nestjs-and-class-validator-cheat-sheet-13ao
 
 /**
@@ -8,70 +8,89 @@ export class Tree {
     /**
      * ID of the tree
      */
+
     @IsNotEmpty()
     @IsInt()
     @Min(0, {message:'ID must be positive'})
     id: number;
 
     /**
-     * TREE INFORMATIONS
+     * TREE NAMES
      */
+
     @IsString()
     @IsNotEmpty()
-    name: string; // arbres_libellefrancais | "C\u00e8dre"       "Marronnier"
+    name: string; // General name (example: oak)
 
     @IsString()
-    commonName: string; // com_nom_usuel | "C\u00e8dre du Liban"    "Marronnier d'Inde"
+    commonName: string; // Precise name (example: white oak)
 
     @IsString()
-    botanicName: string; // com_nom_latin | "Cedrus libani"       "Aesculus hippocastanum"
+    botanicName: string; // Latin name of the tree (search examples on internet if you don't understand this)
+
+    /**
+     * TREE INFORMATION
+     */
 
     @IsInt()
     @Min(0, {message:'Height must be positive'})
     @Max(150, {message:'Maximum height is 150 meters'})
-    height: number; // arbres_hauteurenm | 25.0     22.0
+    height: number; // Tree height in meters
 
     @IsInt()
     @Min(0, {message:'Circumference must be positive'})
     @Max(5000, {message:'Maximum circumference is 5000 cm'})
-    circumference: number; // arbres_circonferenceencm | 468.0      350.0
+    circumference: number; // Tree circumference in centimeters (at the base of the tree)
+
+    /**
+     * TREE AGE
+     */
 
     @IsString()
     @IsIn(['M','A','J'], {message:'DevelopmentStage must be "M", "A" or "J"'})
-    developmentStage: string; // arbres_stadedeveloppement
+    developmentStage: string; // Development stage of the tree
 
     @IsInt()
     @Min(1800)
     @Max(2025)
-    plantationYear: number; // com_annee_plantation | "1862"     "Inconnue"
+    plantationYear: number; // Year of plantation of the tree (not always known)
+
+    /**
+     * TREE DESCRIPTIONS
+     */
 
     @IsString()
     @IsIn(["Paysager", "Historique", "Botanique", "Symbolique"])
-    outstandingQualification: string; // com_qualification_rem | "Paysager"   "Historique"  "Botanique"  "Symbolique"
+    outstandingQualification: string; // Reason why the tree is here (example: historical)
 
     @IsString()
-    summary: string; // com_resume | "Cet arbre est class\u00e9 remarquable pour son ampleur et son empreinte dans le paysage."
+    summary: string; // Summary of the description below
 
     @IsString()
-    description: string; // com_descriptif
+    description: string; // Description of the tree
+
+    /**
+     * CLASSIFICATION OF THE TREE
+     */
 
     @IsString()
-    type: string; // arbres_genre | "Cedrus"   "Aesculus"
+    type: string; // Scientific type of the tree (example: "Cedrus")
 
     @IsString()
-    species: string; // arbres_espece | "atlantica"      "hippocastanum"
+    species: string; // Scientific species of the tree (example: "atlantica")
 
     @IsString()
-    variety: string; // arbres_varieteoucultivar | 15 non nuls
+    variety: string; // Variety of the tree when needed
 
-    @IsString()
-    taxonomicAuthority: string; // com_autorite_taxo | "A.Rich."    "L."
+    /**
+     * PICTURES
+     */
 
     @IsUrl()
-    sign: string; // com_url_pdf | "https://capgeo.sig.paris.fr/PdfEtImages/ArbresRemarquables/PDF/2002348.pdf"
+    sign: string; // Url of the sign of the tree
 
     @IsUrl()
-    picture: string; // com_url_photo1 | "https://capgeo.sig.paris.fr/PdfEtImages/ArbresRemarquables/Photos2023/1/2002348.jpg"
+    picture: string; // Url of a picture of the tree
 
 
     /**
@@ -92,33 +111,14 @@ export class Tree {
     /**
      * Address
      */
-    @IsString()
-    city: string;   // Paris (+ arrondissement ?)
-    // arrondissement: number; // com_arrondissement | "16"       "20"
 
     @IsString()
-    site: string; // com_site: string | "Bois de Boulogne. Grande Cascade"     "Cimeti\u00e8re du P\u00e8re Lachaise"
-
-    @IsString()
-    @IsNotEmpty()
     address: string; // com_adresse || arbres_adresse (if com_adresse null)
     // "Carrefour de Longchamp" "GRANDE CASCADE - CARREFOUR DE LONGCHAMP"
 
     @IsString()
-    domanialite: string; // com_domanialite
+    addressBis: string; // Other address
 
-
-    /**
-     * OTHERS 
-     */
-    @IsString()
-    numDelib: string;  // com_delib_num  (Numéro de délibération)  -> 16 non null
-
-    @IsString()
-    dateDelib: string; // com_delib_date (Date de la délibération) -> 16 non null
-
-    @IsString()
-    copyright: string; // com_copyright1 | "Sonia Yassa / Ville de Paris"      "Mathieu Bedel / Ville de Paris"
 
     /**
      * Full constructor
@@ -136,32 +136,23 @@ export class Tree {
      * @param type type of tree
      * @param species species of the tree
      * @param variety variatety of the tree
-     * @param taxonomicAuthority name(s) of the scientist(s) who first validly published the name of the tree 
      * @param sign url to the picture of the sign of this tree
      * @param picture url to the picture of this tree
      * @param longitude longitude coordinate of this tree
      * @param latitude latitude coordinate of this tree
-     * @param city city where this tree is
-     * @param site name of the site where the tree is
      * @param address address of the tree
-     * @param domanialite domanialite (public space) where the tree is
-     * @param numDelib deliberation number [optionnal]
-     * @param dateDelib deliberation date [optionnal]
-     * @param copyright copyright [optionnal]
+     * @param addressBis other address of the tree
      */
-    constructor(id: number, name: string, commonName: string, botanicName: string, height: number | string, circumference: number | string, 
+    constructor(id: number, name: string, commonName: string, botanicName: string, height: number, circumference: number, 
       developmentStage: string, plantationYear: number | string, outstandingQualification: string, summary: string, description: string,
-      type: string, species: string, variety: string, taxonomicAuthority: string, sign: string, picture: string,
-      longitude: number, latitude: number, city: string, site: string, address: string, domanialite: string,
-      numDelib = "", dateDelib = "", copyright = "") {
+      type: string, species: string, variety: string, sign: string, picture: string,
+      longitude: number, latitude: number, address: string, addressBis = "") {
         this.id = id;
         this.name = name;
         this.commonName = commonName;
         this.botanicName = botanicName;
-        if(typeof height === "number") this.height = height;
-          else if(!Number.isNaN(Number(height))) this.height = Number(height);
-        if(typeof circumference === "number") this.circumference = circumference;
-          else if(!Number.isNaN(Number(circumference))) this.circumference = Number(circumference);
+        this.height = height;
+        this.circumference = circumference;
         this.developmentStage = developmentStage;
         if(typeof plantationYear === "number") this.plantationYear = plantationYear;
           else if(!Number.isNaN(Number(plantationYear))) this.plantationYear = Number(plantationYear)
@@ -171,18 +162,12 @@ export class Tree {
         this.type = type;
         this.species = species;
         this.variety = variety;
-        this.taxonomicAuthority = taxonomicAuthority;
         this.sign = sign;
         this.picture = picture;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.city = city;
-        this.site = site;
         this.address = address;
-        this.domanialite = domanialite;
-        this.numDelib = numDelib;
-        this.dateDelib = dateDelib;
-        this.copyright = copyright;
+        this.addressBis = addressBis;
     }
 }
 
