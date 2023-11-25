@@ -8,8 +8,7 @@ export class Tree {
     /**
      * ID of the tree
      */
-
-    @IsDefined()
+    @IsOptional()
     @IsInt()
     @IsPositive()
     id: number;

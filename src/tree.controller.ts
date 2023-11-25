@@ -28,8 +28,8 @@ export class TreeController {
   // Add a tree
   @Post()
   createBook(@Body() tree: Tree) {
-    this.appService.addTree(tree);
-    return this.appService.getTree(tree.id);
+    let id = this.appService.addNewTree(tree);
+    return this.appService.getTree(id);
   }
 
   // Delete a tree with his id

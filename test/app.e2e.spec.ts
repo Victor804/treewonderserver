@@ -80,13 +80,13 @@ describe('Tree API', () => {
     });
     it('Should return 400 if content is invalid', async () => {
       const response = await httpRequester.post('/trees').send({
-        id : 0, // Invalid line (id must be strictly positive)
+        id : 8,
         name : "arbreTest",
         commonName: "",
         botanicName: "",
         height: 8,
         circumference: 10,
-        plantationYear: 1889, 
+        plantationYear: 2032, // Invalid line (impossible date)
         outstandingQualification: "",
         summary: "resume",
         description: "blablabla",
