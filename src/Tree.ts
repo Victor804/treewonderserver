@@ -1,30 +1,31 @@
-import { IsIn, IsInt, IsNotEmpty, IsNumber, IsString, IsUrl, Max, Min } from 'class-validator';
-// help :  https://dev.to/sarathsantoshdamaraju/nestjs-and-class-validator-cheat-sheet-13ao
+import { IsDefined, IsIn, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUrl, Max, Min } from 'class-validator';
 
 /**
  * CLASS REPRESENTING A TREE WITH ALL HIS INFORMATIONS
  */
 export class Tree {
+    
     /**
      * ID of the tree
      */
 
-    @IsNotEmpty()
+    @IsDefined()
     @IsInt()
-    @Min(0, {message:'ID must be positive'})
+    @IsPositive()
     id: number;
 
     /**
      * TREE NAMES
      */
-
-    @IsString()
     @IsNotEmpty()
+    @IsString()
     name: string; // General name (example: oak)
 
+    @IsOptional()
     @IsString()
     commonName: string; // Precise name (example: white oak)
 
+    @IsOptional()
     @IsString()
     botanicName: string; // Latin name of the tree (search examples on internet if you don't understand this)
 
@@ -32,13 +33,15 @@ export class Tree {
      * TREE INFORMATION
      */
 
+    @IsOptional()
     @IsInt()
-    @Min(0, {message:'Height must be positive'})
+    @IsPositive()
     @Max(150, {message:'Maximum height is 150 meters'})
     height: number; // Tree height in meters
 
+    @IsOptional()
     @IsInt()
-    @Min(0, {message:'Circumference must be positive'})
+    @IsPositive()
     @Max(5000, {message:'Maximum circumference is 5000 cm'})
     circumference: number; // Tree circumference in centimeters (at the base of the tree)
 
@@ -46,49 +49,56 @@ export class Tree {
      * TREE AGE
      */
 
+    @IsOptional()
     @IsString()
     @IsIn(['M','A','J'], {message:'DevelopmentStage must be "M", "A" or "J"'})
     developmentStage: string; // Development stage of the tree
 
+    @IsOptional()
     @IsInt()
-    @Min(1800)
-    @Max(2025)
+    @Min(1700)
+    @Max(2024)
     plantationYear: number; // Year of plantation of the tree (not always known)
 
     /**
      * TREE DESCRIPTIONS
      */
-
+    @IsOptional()
     @IsString()
-    @IsIn(["Paysager", "Historique", "Botanique", "Symbolique"])
+    @IsIn(["", "Paysager", "Historique", "Botanique", "Symbolique"])
     outstandingQualification: string; // Reason why the tree is here (example: historical)
 
+    @IsOptional()
     @IsString()
     summary: string; // Summary of the description below
 
+    @IsOptional()
     @IsString()
     description: string; // Description of the tree
 
     /**
      * CLASSIFICATION OF THE TREE
      */
-
+    @IsOptional()
     @IsString()
     type: string; // Scientific type of the tree (example: "Cedrus")
 
+    @IsOptional()
     @IsString()
     species: string; // Scientific species of the tree (example: "atlantica")
 
+    @IsOptional()
     @IsString()
     variety: string; // Variety of the tree when needed
 
     /**
      * PICTURES
      */
-
+    @IsOptional()
     @IsUrl()
     sign: string; // Url of the sign of the tree
 
+    @IsOptional()
     @IsUrl()
     picture: string; // Url of a picture of the tree
 
@@ -96,26 +106,26 @@ export class Tree {
     /**
      * Geographic coordinates
      */
+    @IsDefined()
     @IsNumber()
     @Min(-180, {message:'Longitude must be between -180 and 180'})
     @Max(180, {message:'Longitude must be between -180 and 180'})
-    @IsNotEmpty()
-    longitude: number;  // "geom_x_y": {"lon": 2.2404811309796573, "lat": 48.86339073126113}
+    longitude: number;  // Real longitude of the tree
 
+    @IsDefined()
     @IsNumber()
     @Min(0, {message:'Latitude must be between 0 and 90'})
     @Max(90, {message:'Latitude must be between 0 and 90'})
-    @IsNotEmpty()
-    latitude: number;   // "geom_x_y": {"lon": 2.2404811309796573, "lat": 48.86339073126113}
+    latitude: number;   // Real latitude of the tree
 
     /**
      * Address
      */
-
+    @IsOptional()
     @IsString()
-    address: string; // com_adresse || arbres_adresse (if com_adresse null)
-    // "Carrefour de Longchamp" "GRANDE CASCADE - CARREFOUR DE LONGCHAMP"
+    address: string; // Main address
 
+    @IsOptional()
     @IsString()
     addressBis: string; // Other address
 
@@ -146,7 +156,7 @@ export class Tree {
     constructor(id: number, name: string, commonName: string, botanicName: string, height: number, circumference: number, 
       developmentStage: string, plantationYear: number | string, outstandingQualification: string, summary: string, description: string,
       type: string, species: string, variety: string, sign: string, picture: string,
-      longitude: number, latitude: number, address: string, addressBis = "") {
+      longitude: number, latitude: number, address: string, addressBis: string) {
         this.id = id;
         this.name = name;
         this.commonName = commonName;
@@ -155,6 +165,7 @@ export class Tree {
         this.circumference = circumference;
         this.developmentStage = developmentStage;
         if(typeof plantationYear === "number") this.plantationYear = plantationYear;
+          // plantationYear is a string in the original API
           else if(!Number.isNaN(Number(plantationYear))) this.plantationYear = Number(plantationYear)
         this.outstandingQualification = outstandingQualification;
         this.summary = summary;
@@ -170,7 +181,12 @@ export class Tree {
         this.addressBis = addressBis;
     }
 }
-
+/**
+ * Function for tree name alphabetical comparison
+ * @param a first tree
+ * @param b second tree
+ * @returns comparison between name of first tree and name of second tree
+ */
 export const compareWithName = (a: Tree, b: Tree): number => {
   return a.name.localeCompare(b.name);
 };

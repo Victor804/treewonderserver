@@ -1,13 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit} from '@nestjs/common';
+import { readFile } from 'fs/promises';
 import { Tree, compareWithName } from './Tree';
-import { promises } from 'fs';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom, map, tap } from 'rxjs';
 import { TreeFromAPI } from './TreeFromAPI';
 
 @Injectable()
-export class TreeService {
-  private readonly forest = new Map<number, Tree>();
+export class TreeService implements OnModuleInit {
+  private forest = new Map<number, Tree>(); // Storage of the trees
 
   constructor(private readonly httpService: HttpService) {}
 
@@ -15,9 +15,8 @@ export class TreeService {
    * Function called on start
    */
   async onModuleInit() {
-    console.log("Start")
     try {
-      Promise.all([
+      await Promise.all([
           this.loadTreesFromApi(),
           this.importLocalTrees()
       ]);
@@ -38,8 +37,8 @@ export class TreeService {
    * Delete a tree from the storage
    * @param id id of the tree to delete
    */
-  delete(id: number) {
-    this.forest.delete(id);
+  delete(id: number): boolean {
+    return this.forest.delete(id);
   }
 
   /**
@@ -65,13 +64,25 @@ export class TreeService {
    * @returns array of trees found, sorted by names
    */
   public getTrees(term: string): Array<Tree> {
-    return this.getAllTrees()
-    .filter((tree) => tree.name.includes(term) || tree.commonName.includes(term) || tree.botanicName.includes(term)
-      || tree.outstandingQualification.includes(term) || tree.summary.includes(term) || tree.description.includes(term)
-      || tree.type.includes(term) || tree.species.includes(term) || tree.variety.includes(term) ||  tree.developmentStage.includes(term)
-      || tree.address.includes(term) || tree.addressBis.includes(term)
+    let a = this.getAllTrees()
+    .filter((tree) => tree.name.includes(term)
+      || (tree.commonName && tree.commonName.includes(term))
+      || (tree.botanicName && tree.botanicName.includes(term))
+      || (tree.outstandingQualification && tree.outstandingQualification.includes(term))
+      || (tree.summary && tree.summary.includes(term))
+      || (tree.description && tree.description.includes(term))
+      || (tree.type && tree.type.includes(term))
+      || (tree.species && tree.species.includes(term))
+      || (tree.variety && tree.variety.includes(term))
+      || (tree.developmentStage && tree.developmentStage.includes(term))
+      || (tree.address && tree.address.includes(term))
+      || (tree.addressBis && tree.addressBis.includes(term))
+      || (tree.height && tree.height.toString().includes(term))
+      || (tree.circumference && tree.circumference.toString().includes(term))
+      || (tree.plantationYear && tree.plantationYear.toString().includes(term))
     )
     .sort(compareWithName);
+    return a
   }
 
   /**
@@ -79,7 +90,7 @@ export class TreeService {
    * @returns Promise
    */
   private async importLocalTrees(): Promise<void> {
-    const data = await promises.readFile('./src/initialTrees.json');
+    const data = await readFile('./src/initialTrees.json');
     const trees: Array<Tree> = JSON.parse(data.toString());
     trees.forEach(tree => this.addTree(tree));
   }
@@ -89,41 +100,40 @@ export class TreeService {
    * @returns Promise
    */
   private async loadTreesFromApi(): Promise<void> {
-    var id = 10
-    this.httpService.get('https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/arbresremarquablesparis2011/records?limit=100') // Maximum limit is 100
+    await firstValueFrom(
+      this.httpService.get('https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/arbresremarquablesparis2011/records?limit=100') // Maximum limit is 100
       .pipe(
-          map((response) => response.data),
-          tap((trees: TreeFromAPI[]) => {
-            trees.forEach((tree) => this.addTreeFromApi(tree, id),id += 10);
-          }),
+          map((response) => response.data["results"]),
+          tap((trees: TreeFromAPI[]) => {trees.forEach((tree, index) => this.addTreeFromApi(tree, index+1));}),
           map(() => undefined),
       )
+    )
     return firstValueFrom(
       this.httpService.get('https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/arbresremarquablesparis2011/records?limit=100&offset=100') // Maximum limit is 100
       .pipe(
-        map((response) => response.data),
-        tap((trees: TreeFromAPI[]) => {
-          trees.forEach((tree) => this.addTreeFromApi(tree, id),id += 10);
-        }),
+        map((response) => response.data["results"]),
+        tap((trees: TreeFromAPI[]) => {trees.forEach((tree, index) => this.addTreeFromApi(tree, index + 101));}),
         map(() => undefined),
       ),
     );
   }
 
   /**
-   * Adds a tree from the online API 
-   * @param tree data obtained from the API 
-   * @param id id to asign to this new tree
+   * Adds a tree from the online API
+   * The tree id will be 10 * index in the original API, so these trees have an id that is a multiple of 10
+   * And the other trees (added manually) will have an id that is not a multiple of 10 to avoid collisions
+   * @param tree data obtained from the API
+   * @param index index of the tree in the original API
    */
-  private addTreeFromApi(tree: TreeFromAPI, id: number) {
-    this.addTree(new Tree(id,
-      tree.arbres_libellefrancais, tree.com_nom_usuel, tree.com_nom_latin,
+  private addTreeFromApi(tree: TreeFromAPI, index: number) {
+    this.addTree(new Tree(index*10,
+      (tree.arbres_libellefrancais)? tree.arbres_libellefrancais: tree.com_nom_usuel, tree.com_nom_usuel, tree.com_nom_latin,
       tree.arbres_hauteurenm, tree.arbres_circonferenceencm,
       tree.arbres_stadedeveloppement, tree.com_annee_plantation,
       tree.com_qualification_rem, tree.com_resume, tree.com_descriptif,
       tree.arbres_genre, tree.arbres_espece, tree.arbres_varieteoucultivar,
       tree.com_url_pdf, tree.com_url_photo1,
-      tree.geom_x_y.get("lon"), tree.geom_x_y.get("lat"),
+      tree.geom_x_y["lon"], tree.geom_x_y["lat"],
       (tree.com_adresse === null || tree.com_adresse === "")? tree.com_adresse: tree.com_site,
       tree.arbres_adresse + "(district " + tree.com_arrondissement + ")"
     ))

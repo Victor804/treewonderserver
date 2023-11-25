@@ -21,21 +21,21 @@ export class TreeController {
 
   // Get a tree with his id
   @Get(':id')
-  getTree(@Param('id') id: number): Tree {
-    return this.appService.getTree(id);
+  getTree(@Param('id') id: string): Tree {
+    return this.appService.getTree(Number(id));
   }
 
   // Add a tree
   @Post()
-  createBook(@Body() tree: Tree): Tree {
+  createBook(@Body() tree: Tree) {
     this.appService.addTree(tree);
     return this.appService.getTree(tree.id);
   }
 
   // Delete a tree with his id
   @Delete(':id')
-  deleteBook(@Param('id') id: number): void {
-    this.appService.delete(id);
+  deleteBook(@Param('id') id: string) {
+    this.appService.delete(Number(id));
   }
 
   // Search all the trees including the term in their parameters
