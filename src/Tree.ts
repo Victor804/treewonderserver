@@ -10,7 +10,7 @@ export class Tree {
      */
     @IsOptional()
     @IsInt()
-    @IsPositive()
+    @Min(0)
     id: number;
 
     /**

@@ -96,37 +96,42 @@ describe('Tree API', () => {
         address: "",
       }).expect(400);
     });
-  })
-
-  describe('DELETE /trees/:id', () => {
-    it('Should delete the tree matching the input id', async () => {
-      // Delete the tree
-      const response = await request(app.getHttpServer()).delete('/trees/1700').expect(200)
-
-      // Check if the tree was successfully deleted
-      const response1 = await httpRequester.get('/trees/1700').expect(200);
-      expect(response1.body).toEqual({})
-      const response2 = await httpRequester.get('/trees').expect(200);
-      expect(response2.body).not.toContainEqual({
-        id: 1700,
-        name: 'Hêtre',
-        commonName: 'Hêtres pleureurs',
-        botanicName: "Fagus sylvatica 'Pendula'",
-        height: 11,
-        circumference: 140,
-        developmentStage: 'A',
-        plantationYear: 1973,
-        outstandingQualification: 'Paysager',
-        summary: 'Ces arbres sont classés remarquable pour leur ampleur et leur empreinte dans le paysage.',
-        description: 'Essence typique de la famille des Fagacées, le hêtre est la deuxième essence de feuillus des forêts françaises après le chêne. Ces hêtres pleureurs confèrent au lieu un caractère romantique et procurent de l’ombre aux promeneurs.',
-        type: 'Fagus',
-        species: 'sylvatica',
-        variety: "''Pendula''",
-        sign: 'https://capgeo.sig.paris.fr/PdfEtImages/ArbresRemarquables/PDF/128373.pdf',
-        picture: 'https://capgeo.sig.paris.fr/PdfEtImages/ArbresRemarquables/Photos2023/1/128373.jpg',
-        longitude: 2.2902094870860523,
-        latitude: 48.83634112301205,
-        address: "Square du Clos Feuquières",
+    it('Should create the tree and return it', async () => {
+      const response = await httpRequester.post('/trees').send({
+        id : 0,
+        name : "arbreTest",
+        commonName: "",
+        botanicName: "",
+        height: 8,
+        circumference: 10,
+        plantationYear: 1889, 
+        outstandingQualification: "",
+        summary: "resume",
+        description: "blablabla",
+        type: "",
+        species: "",
+        variety: "",
+        longitude: 1,
+        latitude: 17,
+        address: "",
+      }).expect(201);
+      expect(response.body).toEqual({
+        id : 4,
+        name : "arbreTest",
+        commonName: "",
+        botanicName: "",
+        height: 8,
+        circumference: 10,
+        plantationYear: 1889, 
+        outstandingQualification: "",
+        summary: "resume",
+        description: "blablabla",
+        type: "",
+        species: "",
+        variety: "",
+        longitude: 1,
+        latitude: 17,
+        address: "",
       })
     });
   })
@@ -165,5 +170,61 @@ describe('Tree API', () => {
     })
   })
 
+  describe('DELETE /trees/:id', () => {
+    it('Should delete the tree matching the input id', async () => {
+      // Delete the tree
+      const response = await request(app.getHttpServer()).delete('/trees/1700').expect(200)
+
+      // Check if the tree was successfully deleted
+      const response1 = await httpRequester.get('/trees/1700').expect(200);
+      expect(response1.body).toEqual({})
+      const response2 = await httpRequester.get('/trees').expect(200);
+      expect(response2.body).not.toContainEqual({
+        id: 1700,
+        name: 'Hêtre',
+        commonName: 'Hêtres pleureurs',
+        botanicName: "Fagus sylvatica 'Pendula'",
+        height: 11,
+        circumference: 140,
+        developmentStage: 'A',
+        plantationYear: 1973,
+        outstandingQualification: 'Paysager',
+        summary: 'Ces arbres sont classés remarquable pour leur ampleur et leur empreinte dans le paysage.',
+        description: 'Essence typique de la famille des Fagacées, le hêtre est la deuxième essence de feuillus des forêts françaises après le chêne. Ces hêtres pleureurs confèrent au lieu un caractère romantique et procurent de l’ombre aux promeneurs.',
+        type: 'Fagus',
+        species: 'sylvatica',
+        variety: "''Pendula''",
+        sign: 'https://capgeo.sig.paris.fr/PdfEtImages/ArbresRemarquables/PDF/128373.pdf',
+        picture: 'https://capgeo.sig.paris.fr/PdfEtImages/ArbresRemarquables/Photos2023/1/128373.jpg',
+        longitude: 2.2902094870860523,
+        latitude: 48.83634112301205,
+        address: "Square du Clos Feuquières",
+      })
+    });
+  })
+
+  describe('DELETE /trees', () => {
+    it('Should delete all the trees', async () => {
+      // Delete all the trees
+      const response = await request(app.getHttpServer()).delete('/trees').expect(200)
+      // Check if the trees were successfully deleted
+      const response1 = await httpRequester.get('/trees').expect(200);
+      expect(response1.body).toEqual([])
+    });
+    it('Should delete all the trees from the API', async () => {
+      // Delete all the trees from the API
+      const response = await request(app.getHttpServer()).delete('/trees/api').expect(200)
+      // Check if the trees were successfully deleted (3 left are the manually added trees)
+      const response1 = await httpRequester.get('/trees').expect(200);
+      expect(response1.body.length).toEqual(3)
+    });
+    it('Should delete all the trees manually added', async () => {
+      // Delete all the trees manually added
+      const response = await request(app.getHttpServer()).delete('/trees/manual').expect(200)
+      // Check if the trees were successfully deleted (189 left are those from the original API)
+      const response1 = await httpRequester.get('/trees').expect(200);
+      expect(response1.body.length).toEqual(189)
+    });
+  })
 
 });

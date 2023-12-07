@@ -9,8 +9,6 @@ import { TreeFromAPI } from './TreeFromAPI';
 export class TreeService implements OnModuleInit {
   private forest = new Map<number, Tree>(); // Storage of the trees
 
-  private id = 1; // Id for the next new tree
-
   constructor(private readonly httpService: HttpService) {}
 
   /**
@@ -31,7 +29,7 @@ export class TreeService implements OnModuleInit {
    * Add a tree in the storage
    * @param tree new tree to add
    */
-  addTree(tree: Tree) {
+  private addTree(tree: Tree) {
     this.forest.set(tree.id, tree);
   }
 
@@ -87,18 +85,41 @@ export class TreeService implements OnModuleInit {
   }
 
   /**
-   * Add a new tree with possible undefind id (in that case, give one an id and return it)
+   * Delete all the trees from the original API or added manually
+   * @param origin "all" (delete all the trees), "api" (delete trees from the original api) or "manual" (delete trees added manually)
+   * @returns whether the parameter origin was valid or not
+   */
+  deleteAll(origin: string): boolean {
+    if(origin === "all") {
+      this.forest.clear()
+    }
+    else if (origin === "api") {
+      for (let key of this.forest.keys())
+        if(key % 10 === 0) this.delete(key)
+    }
+    else if (origin === "manual") {
+      for (let key of this.forest.keys())
+        if(key % 10 > 0) this.delete(key)
+    }
+    else return false;
+    return true;
+  }
+
+
+  /**
+   * Add a new manual tree (with possible undefind id, in that case finds an id and returns it)
    * @param tree new tree to be added in the storage
    * @returns id of the tree
    */
   public addNewTree(tree: Tree): number {
     // If the id is impossible (undefinded, already in the storage, multiple of 10 (reserved for trees from the original API))
     // Give the tree a new ID
-    if(!tree.id || this.forest.has(tree.id) || tree.id % 10 === 0) {
+    if(!tree.id || tree.id % 10 === 0) {
+      // Find a new id
+      let id = 1
+      while(this.forest.has(id) || id % 10 === 0) id += 1
       // Give the new id to the new tree
-      tree.id = this.id;
-      // Actualise the next id (increment it while it already exists in the map or it is a multiple of 10)
-      while(this.forest.has(this.id) && this.id % 10 === 0) this.id += 1
+      tree.id = id;
     }
     // Add the tree
     this.addTree(tree)
@@ -116,13 +137,11 @@ export class TreeService implements OnModuleInit {
     // Get the json list of trees from the text
     const trees: Array<Tree> = JSON.parse(data.toString());
     // Add the trees in the storage
-    trees.forEach(tree => this.addTree(tree));
-    // Actualise the id for the next tree
-    while(this.forest.has(this.id) && this.id % 10 === 0) this.id += 1
+    trees.forEach(tree => this.addNewTree(tree));
   }
 
   /**
-   * Import the trees from the only API 
+   * Import the trees from the online API 
    * @returns Promise
    */
   private async loadTreesFromApi(): Promise<void> {
