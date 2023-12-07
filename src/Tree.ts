@@ -49,11 +49,6 @@ export class Tree {
      */
 
     @IsOptional()
-    @IsString()
-    @IsIn(['M','A','J'], {message:'DevelopmentStage must be "M", "A" or "J"'})
-    developmentStage: string; // Development stage of the tree
-
-    @IsOptional()
     @IsInt()
     @Min(1700)
     @Max(2024)
@@ -133,7 +128,6 @@ export class Tree {
      * @param botanicName botanic (latin) name
      * @param height height of the tree in meters
      * @param circumference circumference of the trunk in centimeters
-     * @param developmentStage development stage of the tree ("M", "A" or "J")
      * @param plantationYear year of plantation of the tree
      * @param outstandingQualification reason why this tree is here ("Paysager", "Historique", "Botanique", "Symbolique")
      * @param summary summary of the description
@@ -148,7 +142,7 @@ export class Tree {
      * @param address address of the tree
      */
     constructor(id: number, name: string, commonName: string, botanicName: string, height: number, circumference: number, 
-      developmentStage: string, plantationYear: number | string, outstandingQualification: string, summary: string, description: string,
+      plantationYear: number | string, outstandingQualification: string, summary: string, description: string,
       type: string, species: string, variety: string, sign: string, picture: string,
       longitude: number, latitude: number, address: string) {
         this.id = id;
@@ -157,7 +151,6 @@ export class Tree {
         this.botanicName = botanicName;
         this.height = height;
         this.circumference = circumference;
-        this.developmentStage = developmentStage;
         if(typeof plantationYear === "number") this.plantationYear = plantationYear;
           // plantationYear is a string in the original API
           else if(!Number.isNaN(Number(plantationYear))) this.plantationYear = Number(plantationYear)
