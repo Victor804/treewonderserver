@@ -50,8 +50,7 @@ describe('Tree API', () => {
         picture: 'https://capgeo.sig.paris.fr/PdfEtImages/ArbresRemarquables/Photos2023/1/2002380.jpg',
         longitude: 2.455366695880772,
         latitude: 48.821320629239985,
-        address: 'Bois de Vincennes. Arboretum de Paris',
-        addressBis: 'ARBORETUM DE L ECOLE DU BREUIL - ROUTE DE LA FERME / ROUTE DE LA PYRAMIDE(district 12)'
+        address: 'Route de la Ferme / Route de la Pyramide',
       })
     });
   })
@@ -75,7 +74,6 @@ describe('Tree API', () => {
         longitude: 1,
         latitude: 17,
         address: "",
-        addressBis: "",
       }).expect(201);
     });
     it('Should return 400 if content is invalid', async () => {
@@ -96,7 +94,6 @@ describe('Tree API', () => {
         longitude: 1,
         latitude: 17,
         address: "",
-        addressBis: "",
       }).expect(400);
     });
   })
@@ -129,8 +126,7 @@ describe('Tree API', () => {
         picture: 'https://capgeo.sig.paris.fr/PdfEtImages/ArbresRemarquables/Photos2023/1/128373.jpg',
         longitude: 2.2902094870860523,
         latitude: 48.83634112301205,
-        address: null,
-        addressBis: 'SQUARE DU CLOS FEUQUIERES(district 15)'
+        address: "Square du Clos Feuquières",
       })
     });
   })
@@ -142,29 +138,29 @@ describe('Tree API', () => {
       expect(response.body.length).toBeGreaterThan(8);
       expect(response.body).toContainEqual({
         id: 70,
-        name: 'Marronnier',commonName: "Marronnier d'Inde",botanicName: 'Aesculus hippocastanum',
-        height: 22,circumference: 350,
-        developmentStage: 'M',outstandingQualification: 'Paysager',
+        name: 'Marronnier', commonName: "Marronnier d'Inde", botanicName: 'Aesculus hippocastanum',
+        height: 22, circumference: 350,
+        developmentStage: 'M', outstandingQualification: 'Paysager',
         summary: 'Cet arbre est classé remarquable pour son ampleur et son empreinte dans le paysage.',
         description: 'Le marronnier est une essence originaire d’Asie Mineure et des Balkans de la famille des Sapindacées. Ses branches maîtresses, naturellement puissantes et arquées, forment une structure en chandelier typique. Cet aspect très recherché au XIXe siècle fut longtemps encouragé par la suppression sélective de plusieurs branches pour empêcher leur croissance. Sa forme majestueuse est remarquable et, en mai, ses fleurs blanches rassemblées en pyramides évoquent des flammes.',
-        type: 'Aesculus',species: 'hippocastanum',variety: null,
+        type: 'Aesculus', species: 'hippocastanum', variety: null,
         sign: 'https://capgeo.sig.paris.fr/PdfEtImages/ArbresRemarquables/PDF/147672.pdf',
         picture: 'https://capgeo.sig.paris.fr/PdfEtImages/ArbresRemarquables/Photos2023/1/147672.jpg',
-        longitude: 2.399983132227271,latitude: 48.85974252900818,
-        address: 'Cimetière du Père Lachaise',addressBis: 'CIMETIERE DU PERE LACHAISE / DIV 76(district 20)'
+        longitude: 2.399983132227271, latitude: 48.85974252900818,
+        address: 'Cimetiere Du Pere Lachaise / Div 76'
       });
       expect(response.body).toContainEqual({
-        id: 690,
-        name: 'Marronnier',commonName: "Marronniers d'Inde",botanicName: 'Aesculus hippocastanum',
-        height: 22,circumference: 330,
-        developmentStage: 'M',outstandingQualification: 'Paysager',
+        id: 700,
+        name: 'Marronnier', commonName: "Marronniers d'Inde", botanicName: 'Aesculus hippocastanum',
+        height: 22, circumference: 330,
+        developmentStage: 'M', outstandingQualification: 'Paysager',
         summary: 'Cet arbre est classé remarquable pour son ampleur et son empreinte dans le paysage.',
         description: "Originaire d’Asie Mineure et des Balkans, le marronnier appartient à la famille des Sapindacées. Son nom scientifique est issu du grec « hippo », cheval, et « kastanon », châtaigne. Les marrons étaient donnés à manger aux équidés.L’histoire des Buttes-Chaumont est, elle aussi, liée aux chevaux. Cette ancienne carrière est devenue, au début du XIXe siècle, un cimetière équin. C'est à partir de 1864 que débutent les travaux d'aménagement du parc que l'on connait aujourd'hui.",
-        type: 'Aesculus',species: 'hippocastanum',variety: null,
+        type: 'Aesculus', species: 'hippocastanum', variety: null,
         sign: 'https://capgeo.sig.paris.fr/PdfEtImages/ArbresRemarquables/PDF/102027.pdf',
         picture: 'https://capgeo.sig.paris.fr/PdfEtImages/ArbresRemarquables/Photos2023/1/102027.jpg',
-        longitude: 2.385709503891203,latitude: 48.88007971973175,
-        address: null,addressBis: 'PARC DES BUTTES CHAUMONT(district 19)'
+        longitude: 2.385709503891203, latitude: 48.88007971973175,
+        address: "Parc des Buttes Chaumont"
       });
     })
   })

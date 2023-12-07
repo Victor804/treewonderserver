@@ -124,10 +124,6 @@ export class Tree {
     @IsString()
     address: string; // Main address
 
-    @IsOptional()
-    @IsString()
-    addressBis: string; // Other address
-
 
     /**
      * Full constructor
@@ -150,12 +146,11 @@ export class Tree {
      * @param longitude longitude coordinate of this tree
      * @param latitude latitude coordinate of this tree
      * @param address address of the tree
-     * @param addressBis other address of the tree
      */
     constructor(id: number, name: string, commonName: string, botanicName: string, height: number, circumference: number, 
       developmentStage: string, plantationYear: number | string, outstandingQualification: string, summary: string, description: string,
       type: string, species: string, variety: string, sign: string, picture: string,
-      longitude: number, latitude: number, address: string, addressBis: string) {
+      longitude: number, latitude: number, address: string) {
         this.id = id;
         this.name = name;
         this.commonName = commonName;
@@ -177,7 +172,6 @@ export class Tree {
         this.longitude = longitude;
         this.latitude = latitude;
         this.address = address;
-        this.addressBis = addressBis;
     }
 }
 /**

@@ -78,7 +78,6 @@ export class TreeService implements OnModuleInit {
       || (tree.variety && tree.variety.includes(term))
       || (tree.developmentStage && tree.developmentStage.includes(term))
       || (tree.address && tree.address.includes(term))
-      || (tree.addressBis && tree.addressBis.includes(term))
       || (tree.height && tree.height.toString().includes(term))
       || (tree.circumference && tree.circumference.toString().includes(term))
       || (tree.plantationYear && tree.plantationYear.toString().includes(term))
@@ -161,8 +160,9 @@ export class TreeService implements OnModuleInit {
       tree.arbres_genre, tree.arbres_espece, tree.arbres_varieteoucultivar,
       tree.com_url_pdf, tree.com_url_photo1,
       tree.geom_x_y["lon"], tree.geom_x_y["lat"],
-      (tree.com_adresse === null || tree.com_adresse === "")? tree.com_adresse: tree.com_site,
-      tree.arbres_adresse + "(district " + tree.com_arrondissement + ")"
+      (tree.com_adresse === null || tree.com_adresse === "")?
+        (tree.com_site === null || tree.com_site === "")? tree.arbres_adresse: tree.com_site
+        : tree.com_adresse
     ))
   }
 }
