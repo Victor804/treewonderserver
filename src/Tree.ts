@@ -100,13 +100,13 @@ export class Tree {
     /**
      * Geographic coordinates
      */
-    @IsDefined()
+    @IsOptional()
     @IsNumber()
     @Min(-180, {message:'Longitude must be between -180 and 180'})
     @Max(180, {message:'Longitude must be between -180 and 180'})
     longitude: number;  // Real longitude of the tree
 
-    @IsDefined()
+    @IsOptional()
     @IsNumber()
     @Min(0, {message:'Latitude must be between 0 and 90'})
     @Max(90, {message:'Latitude must be between 0 and 90'})
