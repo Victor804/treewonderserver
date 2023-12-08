@@ -74,7 +74,6 @@ export class TreeService implements OnModuleInit {
       || (tree.type && tree.type.includes(term))
       || (tree.species && tree.species.includes(term))
       || (tree.variety && tree.variety.includes(term))
-      || (tree.developmentStage && tree.developmentStage.includes(term))
       || (tree.address && tree.address.includes(term))
       || (tree.height && tree.height.toString().includes(term))
       || (tree.circumference && tree.circumference.toString().includes(term))
@@ -174,7 +173,7 @@ export class TreeService implements OnModuleInit {
     this.addTree(new Tree(index*10,
       (tree.arbres_libellefrancais)? tree.arbres_libellefrancais: tree.com_nom_usuel, tree.com_nom_usuel, tree.com_nom_latin,
       tree.arbres_hauteurenm, tree.arbres_circonferenceencm,
-      tree.arbres_stadedeveloppement, tree.com_annee_plantation,
+      tree.com_annee_plantation,
       tree.com_qualification_rem, tree.com_resume, tree.com_descriptif,
       tree.arbres_genre, tree.arbres_espece, tree.arbres_varieteoucultivar,
       tree.com_url_pdf, tree.com_url_photo1,
