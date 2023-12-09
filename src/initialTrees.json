@@ -5,24 +5,24 @@
       "circumference" : "20",
       "outstandingQualification" : "Décoratif",
       "description" : "4 arbres pour décorer le rond-point entre l'école et la résidence",
-      "longitude" : 43.445603,
-      "latitude" : 5.479863,
+      "latitude" : "43.445603",
+      "longitude" : "5.479863",
       "address" : "880 Rte de Mimet, 13120 Gardanne"
   },
   {
       "name" : "Oliviers",
       "outstandingQualification" : "Commémoratif",
       "description" : "Arbres plantés dans la résidence pour commémorer les élèves morts durant leur scolarité",
-      "longitude" : "43.446153",
-      "latitude" : "5.480700",
+      "latitude" : "43.446153",
+      "longitude" : "5.480700",
       "address" : "879 Rte de Mimet, 13120 Gardanne"
   },
   {
       "name" : "Arbres Mimet-Cézane",
       "outstandingQualification" : "Décoratif",
       "description" : "3 petits arbres décorant le rond-point en bas de la route de Mimet",
-      "longitude" : "43.45138909937698",
-      "latitude" : "5.472644098700098",
+      "latitude" : "43.451389",
+      "longitude" : "5.472644",
       "address" : "Gardanne, 13120"
   }
   ]
