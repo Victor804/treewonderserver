@@ -12,7 +12,7 @@ export class TreeService implements OnModuleInit {
   constructor(private readonly httpService: HttpService) {}
 
   /**
-   * Function called on start
+   * Function called on start: load the initial trees
    */
   async onModuleInit() {
     try {
@@ -106,18 +106,19 @@ export class TreeService implements OnModuleInit {
 
 
   /**
-   * Add a new manual tree (with possible undefind id, in that case finds an id and returns it)
+   * Add a new manual tree
+   * The tree id will not be a multiple of 10, reserved for trees from the original API to differentiate them
+   * The id can be undefind (or equal to 0), in that case the function gives the tree an id
    * @param tree new tree to be added in the storage
    * @returns id of the tree
    */
   public addNewTree(tree: Tree): number {
-    // If the id is impossible (undefinded, already in the storage, multiple of 10 (reserved for trees from the original API))
-    // Give the tree a new ID
+    // If the id is impossible: undefinded, or multiple of 10
     if(!tree.id || tree.id % 10 === 0) {
       // Find a new id
       let id = 1
       while(this.forest.has(id) || id % 10 === 0) id += 1
-      // Give the new id to the new tree
+      // Give the new id to the tree
       tree.id = id;
     }
     // Add the tree
@@ -140,7 +141,8 @@ export class TreeService implements OnModuleInit {
   }
 
   /**
-   * Import the trees from the online API 
+   * Import the trees from the online API
+   * The original API accepts requests of 100 item maximum, so the function needs to make 2 requests
    * @returns Promise
    */
   private async loadTreesFromApi(): Promise<void> {
@@ -165,7 +167,7 @@ export class TreeService implements OnModuleInit {
   /**
    * Adds a tree from the online API
    * The tree id will be 10 * index in the original API, so these trees have an id that is a multiple of 10
-   * And the other trees (added manually) will have an id that is not a multiple of 10 to avoid collisions
+   * And the other trees (added manually) will have an id that is not a multiple of 10 to avoid collisions during the initial loading
    * @param tree data obtained from the API
    * @param index index of the tree in the original API
    */
@@ -178,6 +180,7 @@ export class TreeService implements OnModuleInit {
       tree.arbres_genre, tree.arbres_espece, tree.arbres_varieteoucultivar,
       tree.com_url_pdf, tree.com_url_photo1,
       tree.geom_x_y["lon"], tree.geom_x_y["lat"],
+      // For the address, com_address is privileged, or com_site if the previous one is null, otherwise arbres_adresse
       (tree.com_adresse === null || tree.com_adresse === "")?
         (tree.com_site === null || tree.com_site === "")? tree.arbres_adresse: tree.com_site
         : tree.com_adresse

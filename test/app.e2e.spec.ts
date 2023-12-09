@@ -141,7 +141,7 @@ describe('Tree API', () => {
       expect(response.body).toEqual(expect.any(Array));
       expect(response.body.length).toBeGreaterThan(8);
       expect(response.body).toContainEqual({
-        id: 70,
+        id: 80,
         name: 'Marronnier', commonName: "Marronnier d'Inde", botanicName: 'Aesculus hippocastanum',
         height: 22, circumference: 350,
         outstandingQualification: 'Paysager',

@@ -1,4 +1,4 @@
-import { IsDefined, IsIn, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUrl, Max, Min } from 'class-validator';
+import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUrl, Max, Min } from 'class-validator';
 
 /**
  * CLASS REPRESENTING A TREE WITH ALL HIS INFORMATIONS
@@ -59,7 +59,6 @@ export class Tree {
      */
     @IsOptional()
     @IsString()
-    @IsIn(["", "Paysager", "Historique", "Botanique", "Symbolique"])
     outstandingQualification: string; // Reason why the tree is here (example: historical)
 
     @IsOptional()
